@@ -5,9 +5,10 @@ import { useGetWorkspaces } from "@/features/workspaces/api/use-get-workspaces";
 import { Select, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { SelectContent } from "@radix-ui/react-select";
 import { WorkspaceAvatar } from "@/features/workspaces/components/workspace-avatar";
-import { useRouter } from "next/router";
+
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal";
+import { useRouter } from "next/navigation";
 
 
 export const WorkspaceSwitcher = () => {

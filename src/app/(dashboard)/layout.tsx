@@ -7,7 +7,7 @@ interface DashbordLayoutProps {
 };
 
 
-const DashboardLayout = ( { children }: DashbordLayoutProps ) => {
+const DashboardLayout = ({ children }: DashbordLayoutProps) => {
 
 
     return (

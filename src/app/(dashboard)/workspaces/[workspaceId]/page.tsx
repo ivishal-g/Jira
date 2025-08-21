@@ -12,7 +12,7 @@ const WorkspaceIdPage = async () => {
 
     return (
         <div>
-            Workspae Id
+            Workspace Id
         </div>
     )
 }

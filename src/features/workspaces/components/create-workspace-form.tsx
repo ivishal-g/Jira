@@ -14,8 +14,8 @@ import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "../api/use-create-workspace";
 import { ImageIcon } from "lucide-react";
 import { useRef } from "react";
-import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 
 
