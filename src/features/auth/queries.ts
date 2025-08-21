@@ -21,7 +21,7 @@ export const getCurrent = async () => {
         const account = new Account(client);
 
         return await account.get();
-    }catch{
+    } catch {
         return null;
     }
 

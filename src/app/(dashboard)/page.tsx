@@ -1,6 +1,6 @@
 
 
-import { getCurrent } from "@/features/auth/actions";
+import { getCurrent } from "@/features/auth/queries";
 import { getWorkspaces } from "@/features/workspaces/actions";
 import { redirect } from "next/navigation";
 
