@@ -28,6 +28,7 @@ export const useLogout = () => {
             toast.success("Logged out")
             router.refresh();
             queryClinet.invalidateQueries({ queryKey: ["current"] });
+            queryClinet.invalidateQueries({ queryKey: ["workspaces"] });
         },
         onError: () => {
             toast.error("failed to logged out");
