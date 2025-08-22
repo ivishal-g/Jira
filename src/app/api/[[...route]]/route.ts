@@ -1,8 +1,8 @@
 import { Hono } from "hono";    
 import { handle } from "hono/vercel";
 import auth from  "@/features/auth/server/route"; 
-import workspaces from "@/features/members/server/route";
-import member from "@/features/workspaces/server/route";
+import workspaces from "@/features/workspaces/server/route";
+import member from "@/features/members/server/route";
 
 const app = new Hono().basePath("/api/");
 
