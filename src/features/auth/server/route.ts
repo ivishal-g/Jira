@@ -68,7 +68,9 @@ const app = new Hono()
             return c.json({ success:true });
         }
     )
-    .post("/logout", sessionMiddleware , async (c) => {
+    .post(
+        "/logout", 
+        sessionMiddleware , async (c) => {
         const account = c.get("account");
 
         deleteCookie(c, AUTH_COOKIE);
