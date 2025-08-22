@@ -18,3 +18,5 @@ const WorkspaceIdPage = async ({ params }) => {
         </div>
     )
 }
+
+export default WorkspaceIdPage

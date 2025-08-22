@@ -7,7 +7,6 @@ import { redirect } from "next/navigation";
 interface WorkspaceIdJoinPageProps {
     params: {
         workspaceId: string;
-        inviteCode: string;
     }
 }
 

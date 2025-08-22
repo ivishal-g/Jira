@@ -33,7 +33,7 @@ export const JoinWorkspaceForm = ({initialValues}: JoinWorkspaceFormProps) => {
             onSuccess: ({ data }) => {
                 router.push(`/workspaces/${data.$id}`);
             }
-        })
+        });
     }
 
 
@@ -58,7 +58,6 @@ export const JoinWorkspaceForm = ({initialValues}: JoinWorkspaceFormProps) => {
                         asChild
                         size="lg"
                         className="w-full lg:w-fit"
-                        disabled={isPending}
                     >
                         <Link href="/">
                             Cancel
@@ -69,11 +68,12 @@ export const JoinWorkspaceForm = ({initialValues}: JoinWorkspaceFormProps) => {
                         size="lg"
                         type="button"
                         onClick={onSubmit}
+                        disabled={isPending}
                     >
                         Join Workspace
                     </Button>
                 </div>
             </CardContent>
         </Card>
-    )
+    ) 
 }
