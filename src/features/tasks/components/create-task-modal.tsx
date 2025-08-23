@@ -1,9 +1,7 @@
 "use client";
 
-
 import { ResponsiveModel } from "@/components/responsive-model";
 import { useCreateTaskModal } from "../hooks/use-create-task-modal"
-
 
 
 const CreateTaskModal = () => {
