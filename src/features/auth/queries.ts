@@ -10,5 +10,4 @@ export const getCurrent = async () => {
     } catch {
         return null;
     }
-
 }

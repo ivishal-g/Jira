@@ -13,7 +13,8 @@ import z from "zod";
 
 
 const app = new Hono()
-    .get("/",
+    .get(
+        "/",
         sessionMiddleware, async (c) => {
             const user = c.get("user");
             const databases = c.get("databases");
