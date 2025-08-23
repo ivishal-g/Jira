@@ -4,6 +4,8 @@ import auth from  "@/features/auth/server/route";
 import workspaces from "@/features/workspaces/server/route";
 import member from "@/features/members/server/route";
 import projects from "@/features/projects/server/route";
+import tasks from "@/features/tasks/server/route";
+
 
 
 
@@ -14,6 +16,7 @@ const routes = app
     .route("/workspaces", workspaces)
     .route("/member", member)
     .route("/projects", projects)
+    .route("/tasks", tasks) 
     
 export const GET = handle(app);
 export const POST = handle(app);

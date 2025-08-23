@@ -2,7 +2,7 @@
 
 import { ResponsiveModel } from "@/components/responsive-model"
 import { CreateProjectForm } from "./create-project-form"
-import { useCreateProjectModal } from "../hooks/use-create-workspace-modal";
+import { useCreateProjectModal } from "../hooks/use-create-project-modal";
 
 
 
