@@ -11,11 +11,12 @@ import { DottedSeparator } from "@/components/dotted-separator";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useCreateProject } from "../api/use-create-project";
 import { ImageIcon } from "lucide-react";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { useRouter } from "next/navigation";
+import { useCreateProject } from "../api/use-update-project";
 
 
 
@@ -25,6 +26,7 @@ interface CreateProjectFormProps {
 
 export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
     const workspaceId = useWorkspaceId();
+    const router = useRouter();
     const { mutate, isPending} = useCreateProject();
     const inputRef = useRef<HTMLInputElement>(null);
     const form = useForm<z.infer<typeof createProjectSchema>>({
@@ -42,8 +44,9 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
         };
 
         mutate({ form: finalValues },{
-            onSuccess:() => {
+            onSuccess:({ data }) => {
                 form.reset();
+                router.push(`/workspaces/${workspaceId}/projects/${data.$id}`)
             }
         });
     };
