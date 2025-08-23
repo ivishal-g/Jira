@@ -4,7 +4,7 @@ import z from "zod";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useForm } from "react-hook-form";
-import { createProjectSchema } from "../schema";
+import { createProjectSchema } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DottedSeparator } from "@/components/dotted-separator";

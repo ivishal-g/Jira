@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { loginSchema } from "../schema";
+import { loginSchema } from "../schemas";
 import { useLogin } from "../api/use-login";
 
 

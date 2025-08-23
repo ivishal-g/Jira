@@ -15,7 +15,7 @@ import { useRef } from "react";
 import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import { Project } from "../types";
-import { updateProjectSchema } from "../schema";
+import { updateProjectSchema } from "../schemas";
 import { useCreateProject } from "../api/use-update-project";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteProject } from "../api/use-delete-project";
