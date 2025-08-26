@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
-import { useRouter } from "next/navigation";
+
 import { useCreateTask } from "../api/use-create-task";
 import { DatePicker } from "@/components/date-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -24,30 +24,34 @@ import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 
 interface CreateTaskFormProps {
     onCancel?: () => void;
-    projectOptions: { id: string, name: string, imageUrl: string }[];
-    memberOptions: { id:string, name: string }[];
+    projectOptions: { id: string, name: string, imageUrl: string}[];
+    memberOptions: { id: string, name: string }[];
 }
 
-export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: CreateTaskFormProps) => {
+export const CreateTask = ({ onCancel, projectOptions, memberOptions }: CreateTaskFormProps) => {
     const workspaceId = useWorkspaceId();
     const { mutate, isPending} = useCreateTask();
-    
     const form = useForm<z.infer<typeof createTaskSchema>>({
-        resolver: zodResolver(createTaskSchema.omit({ workspaceId:true })),
+        resolver: zodResolver(createTaskSchema),
         defaultValues: {
             workspaceId,
-        }
+        },
     })
 
     const onSubmit = (values:z.infer<typeof createTaskSchema>) => {
-        mutate({ json: { ...values, workspaceId } },{
+        const finalValues = {
+            ...values,
+            workspaceId,
+            image: values.image instanceof File ? values.image : ""
+        };
+
+        mutate({ json: finalValues },{
             onSuccess:() => {
                 form.reset();
                 onCancel?.();
             }
         });
     };
-
 
 
     return (
@@ -87,10 +91,12 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>
-                                        Due Date
+                                        Due Name
                                     </FormLabel>
                                     <FormControl>
-                                        <DatePicker {...field} />
+                                        <DatePicker 
+                                            {...field}
+                                        />
                                     </FormControl>
                                 </FormItem>
                             )}
@@ -115,7 +121,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                                         <FormMessage />
                                         <SelectContent>
                                             {memberOptions.map((member) => (
-                                                <SelectItem  key={member.id} value={member.id}>
+                                                <SelectItem key={member.id} value={member.id} >
                                                     <div className="flex items-center gap-x-2">
                                                         <MemberAvatar 
                                                             className="size-6"
@@ -150,17 +156,17 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                                         <FormMessage />
                                         <SelectContent>
                                             <SelectItem value={TaskStatus.BACKLOG}>
-                                                Backlog
+                                                BackLog
                                             </SelectItem>
                                             <SelectItem value={TaskStatus.IN_PROGRESS}>
                                                 In Progress
-                                            </SelectItem><SelectItem value={TaskStatus.IN_REVIEW}>
+                                            </SelectItem>
+                                            <SelectItem value={TaskStatus.IN_REVIEW}>
                                                 In Review
                                             </SelectItem>
                                             <SelectItem value={TaskStatus.TODO}>
-                                                TODO
-                                            </SelectItem>
-                                            <SelectItem value={TaskStatus.DONE}>
+                                                Todo
+                                            </SelectItem><SelectItem value={TaskStatus.DONE}>
                                                 Done
                                             </SelectItem>
                                         </SelectContent>
@@ -168,14 +174,13 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                                 </FormItem>
                             )}
                         />
-                        
                         <FormField
                             control={form.control}
                             name="projectId"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>
-                                        ProjectId
+                                        Project
                                     </FormLabel>
                                     <Select
                                         defaultValue={field.value}
@@ -188,8 +193,8 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                                         </FormControl>
                                         <FormMessage />
                                         <SelectContent>
-                                            {memberOptions.map((project) => (
-                                                <SelectItem  key={project.id} value={project.id}>
+                                            {projectOptions.map((project) => (
+                                                <SelectItem key={project.id} value={project.id} >
                                                     <div className="flex items-center gap-x-2">
                                                         <ProjectAvatar 
                                                             className="size-6"
@@ -205,7 +210,6 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                                 </FormItem>
                             )}
                         />
-
                         </div>
                         <DottedSeparator className="py-7"/>
                         <div className="flex items-center justify-between">
@@ -223,7 +227,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                                 type="submit"
                                 size="lg"
                             >
-                                Create Project
+                                Create Task
                             </Button>
                         </div>
                     </form>

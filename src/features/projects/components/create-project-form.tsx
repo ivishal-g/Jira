@@ -16,7 +16,8 @@ import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { useRouter } from "next/navigation";
-import { useCreateProject } from "../api/use-update-project";
+import { useCreateProject } from "../api/use-create-project";
+
 
 
 

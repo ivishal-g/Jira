@@ -12,7 +12,7 @@ interface DatePickerProps {
     placeholder?: string;
 };
 
-export const DatePicker = ({ value, onChagne, className ,placeholder= "Select date"}:DatePickerProps) => {
+export const DatePicker = ({ value, onChange, className ,placeholder= "Select date"}:DatePickerProps ) => {
 
 
     return (
@@ -35,7 +35,7 @@ export const DatePicker = ({ value, onChagne, className ,placeholder= "Select da
                 <Calendar 
                     mode="single"
                     selected={value}
-                    onSelect={(date) => onChagne(date as Date)}
+                    onSelect={(date) => onChange(date as Date)}
                     initialFocus
                 />
             </PopoverContent>

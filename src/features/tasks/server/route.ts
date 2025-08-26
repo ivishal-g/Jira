@@ -6,13 +6,48 @@ import { getMember } from "@/features/members/utils";
 import { DATABASE_ID, MEMBERS_ID, PROJECTS_ID, TASKS_ID } from "@/config";
 import { ID, Query } from "node-appwrite";
 import z from "zod";
-import { TaskStatus } from "../types";
+import { Task, TaskStatus } from "../types";
 import { createAdminClient } from "@/lib/appwrite";
 import { Project } from "@/features/projects/types";
 
 
 
 const app = new Hono()
+    .delete(
+        "/:taskId",
+        sessionMiddleware,
+        async (c) => {
+            const user = c.get("user");
+            const databases = c.get("databases");
+            const { taskId } = c.req.param();
+
+            const task = await databases.getDocument<Task>(
+                DATABASE_ID,
+                TASKS_ID,
+                taskId,
+            )  
+
+            const member = await getMember({
+                databases,
+                workspaceId: task.workspaceId,
+                userId: user.$id,
+            })
+            
+
+            if(!member){
+                return c.json({ error: "Unauthorized"}, 401);
+            }
+
+            await databases.deleteDocument(
+                DATABASE_ID,
+                TASKS_ID,
+                taskId,
+            )
+
+            return c.json({ data: { $id: task.$id}})
+
+        }
+    )
     .get(
         "/",
         sessionMiddleware,
@@ -33,7 +68,7 @@ const app = new Hono()
             const databases = c.get("databases");
             const user = c.get("user");
 
-            const {
+            const { 
                 workspaceId,
                 projectId,
                 status,
@@ -82,7 +117,7 @@ const app = new Hono()
                 query.push(Query.equal("search", search));
             }
 
-            const tasks = await databases.listDocuments(
+            const tasks = await databases.listDocuments<Task>(
                 DATABASE_ID,
                 TASKS_ID,
                 query,
@@ -105,7 +140,7 @@ const app = new Hono()
             )
             const assignees = await Promise.all(
                 members.documents.map(async (member) => {
-                    const user = await users.get(member.userId);
+                    const user = await users.get(member.$id)
 
 
                     return {
@@ -197,6 +232,56 @@ const app = new Hono()
                     dueDate,
                     assigneedId,
                     position: newPosition
+                },
+            )
+
+            return c.json({ data: task});
+        }
+    )
+    .patch(
+        "/:taskId",
+        sessionMiddleware,
+        zValidator("json", createTaskSchema.partial()),
+        async (c) => {
+            const user = c.get("user");
+            const databases = c.get("databases");
+            const {
+                name,
+                status,
+                description,
+                projectId,
+                dueDate,
+                assigneedId
+            } = c.req.valid("json");
+            const { taskId } = c.req.param()
+
+            const existingTask = await databases.getDocument<Task>(
+                DATABASE_ID,
+                TASKS_ID,
+                taskId,
+            );
+
+            const member = await getMember({
+                databases,
+                workspaceId:existingTask.workspaceId,
+                userId: user.$id,
+            });
+
+            if(!member){
+                return c.json({ error: "Unauthorized" }, 401)
+            }
+
+            const task = await databases.updateDocument(
+                DATABASE_ID,
+                TASKS_ID,
+                taskId,
+                {
+                    name,
+                    status,
+                    projectId,
+                    dueDate,
+                    assigneedId,
+                    description,
                 },
             )
 

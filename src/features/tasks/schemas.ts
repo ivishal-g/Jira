@@ -1,16 +1,16 @@
-import z from "zod";
+import { z }  from "zod";
 import { TaskStatus } from "./types";
 
 
 
 
-
 export const createTaskSchema = z.object({
-    name: z.string().min(1, "Required"),
-    status: z.nativeEnum(TaskStatus, { required_error: "Required"}),
-    workspaceId: z.string().trim().min(1, "Required",),
-    projectId: z.string().trim().min(1, "required"),
-    dueDate: z.coerce.date(),
-    assigneedId: z.string().trim().min(1, "Required"),
-    description: z.string().optional()
-})
+  name: z.string(),
+  status: z.nativeEnum(TaskStatus),
+  workspaceId: z.string(),
+  projectId: z.string(),
+  dueDate: z.date(),
+  assigneedId: z.string(),
+  description: z.string().optional(),
+  image: z.any().optional(),
+});
