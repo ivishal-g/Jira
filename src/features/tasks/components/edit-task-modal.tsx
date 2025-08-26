@@ -2,7 +2,8 @@
 
 import { ResponsiveModel } from "@/components/responsive-model";
 import { useCreateTaskModal } from "../hooks/use-create-task-modal"
-import { CreateTaskFormWrapper } from "./create-task-form-wrapper";
+
+import { EditTaskFormWrapper } from "./edit-task-form-wrapper";
 
 
 const EditTaskModal = () => {
@@ -12,7 +13,7 @@ const EditTaskModal = () => {
     return (
         <ResponsiveModel open={!!taskId} onOpenChange={close} >
             {taskId && (
-                <CreateTaskFormWrapper onCancel={close} />
+                <EditTaskFormWrapper id={taskId} onCancel={close} />
             )}
         </ResponsiveModel>
     )

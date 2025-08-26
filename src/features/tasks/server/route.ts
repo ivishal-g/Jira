@@ -288,5 +288,59 @@ const app = new Hono()
             return c.json({ data: task});
         }
     )
+    .get(
+        "/:taskId",
+        sessionMiddleware,
+        async (c) => {
+            const databases = c.get("databases")
+            const { users } = await createAdminClient();
+            const { taskId } = c.req.param();
+            const currentUser = c.get("user")
+
+            const task = await databases.getDocument<Task>(
+                DATABASE_ID,
+                TASKS_ID,
+                taskId
+            );
+
+            const currentMember = await getMember({
+                databases,
+                workspaceId: task.workspaceId,
+                userId: currentUser.$id,
+            })
+
+            if(!currentMember){
+                return c.json({ error: "Unauthorized"}, 401);
+            }
+            
+            const project = await databases.getDocument<Project>(
+                DATABASE_ID,
+                PROJECTS_ID,
+                task.projectId
+            );
+
+            const member = await databases.getDocument(
+                DATABASE_ID,
+                MEMBERS_ID,
+                task.assigneedId
+            )
+
+            const user = await users.get(member.userId);
+
+            const assignee = {
+                ...member,
+                name: user.name,
+                email: user.emaild,
+            }
+
+            return c.json({
+                data: {
+                    ...task,
+                    project,
+                    assignee
+                }
+            })
+        }
+    )
 
 export default app; 

@@ -16,25 +16,27 @@ import { useCreateTask } from "../api/use-create-task";
 import { DatePicker } from "@/components/date-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
-import { TaskStatus } from "../types";
+import { Task, TaskStatus } from "../types";
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
+import { useUpdateTask } from "../api/use-update-task";
 
 
 
 
-interface CreateTaskFormProps {
+interface EditTaskFormProps {
     onCancel?: () => void;
     projectOptions: { id: string, name: string, imageUrl: string}[];
     memberOptions: { id: string, name: string }[];
+    initialValues: Task;
 }
 
-export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: CreateTaskFormProps) => {
+export const EditTaskForm = ({ onCancel, projectOptions,initialValues, memberOptions }: EditTaskFormProps) => {
     const workspaceId = useWorkspaceId();
-    const { mutate, isPending} = useCreateTask();
+    const { mutate, isPending} = useUpdateTask();
     const form = useForm<z.infer<typeof createTaskSchema>>({
-        resolver: zodResolver(createTaskSchema.omit({ workspaceId: true})),
+        resolver: zodResolver(createTaskSchema.omit({ workspaceId: true, description: true})),
         defaultValues: {
-            workspaceId,
+            ...initialValues.dueDate ? new Date(initialValues.dueDate) : undefined,
         },
     })
 
@@ -44,8 +46,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
             workspaceId,
             image: values.image instanceof File ? values.image : ""
         };
-
-        mutate({ json: finalValues },{
+        mutate({ json: values, param:{ taskId: initialValues.$id } },{
             onSuccess:() => {
                 form.reset();
                 onCancel?.();
@@ -58,7 +59,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
         <Card className="w-full h-full border-none shadow-none">
             <CardHeader className="flex p-7">
                 <CardTitle className="text-xl font-bold">
-                    create a new Task
+                    Edit a Task
                 </CardTitle>
             </CardHeader>
             <div className="px-7" >
@@ -227,7 +228,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                                 type="submit"
                                 size="lg"
                             >
-                                Create Task
+                                Save Changes
                             </Button>
                         </div>
                     </form>

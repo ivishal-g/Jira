@@ -1,13 +1,10 @@
-import { z }  from "zod";
+import { boolean, z }  from "zod";
 import { TaskStatus } from "./types";
-
-
-
 
 export const createTaskSchema = z.object({
   name: z.string(),
   status: z.nativeEnum(TaskStatus),
-  workspaceId: z.string(),
+  workspaceId: z.string() || boolean,
   projectId: z.string(),
   dueDate: z.date(),
   assigneedId: z.string(),
