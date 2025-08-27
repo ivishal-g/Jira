@@ -16,9 +16,11 @@ import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import { Project } from "../types";
 import { updateProjectSchema } from "../schemas";
-import { useCreateProject } from "../api/use-update-project";
+
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteProject } from "../api/use-delete-project";
+import { useCreateProject } from "../api/use-create-project";
+
 
 
 
@@ -37,13 +39,11 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
         isPending: isDeletingProject
     } = useDeleteProject();
 
- 
     const [DeleteDialog, confirmDelete] = useConfirm(
         "Delete Project",
         "This action cannot be undone",
         "destructive",
     );
-
 
     const form = useForm<z.infer<typeof updateProjectSchema>>({
         resolver: zodResolver(updateProjectSchema),
@@ -67,8 +67,6 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
         })
     }
 
-    
-
     const onSubmit = (values:z.infer<typeof updateProjectSchema>) => {
         const finalValues = {
             ...values,
@@ -78,13 +76,8 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
         mutate({ 
             form: finalValues,
             param: { projectId: initialValues.$id}
-        },{
-            onSuccess:() => {
-                form.reset();
-            },
         });
     };
-
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -92,8 +85,7 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
         if(file){
             form.setValue("image", file);
         }
-    }
-
+    };
 
     return (
         <div className="flex flex-col gap-y-4">

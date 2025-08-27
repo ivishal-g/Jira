@@ -8,6 +8,7 @@ import { MemberRole } from "@/features/members/types";
 import { generateInviteCode } from "@/lib/utils";
 import { getMember } from "@/features/members/utils";
 import z from "zod";
+import { Workspace } from "../types";
 
 
 
@@ -255,6 +256,33 @@ const app = new Hono()
                     role: MemberRole.MEMBER,
                 },
             );
+
+            return c.json({ data: workspace })
+        }
+    )
+    .get(
+        "/:workspaceId",
+        sessionMiddleware,
+        async (c) => {
+            const user = c.get("user");
+            const databases = c.get("databases");
+            const { workspaceId } = c.req.param();
+
+            const member = await getMember({
+                databases,
+                workspaceId,
+                userId: user.$id,
+            });
+
+            if(!member) {
+                return c.json({ error: "Unauthorized"}, 401);
+            }
+
+            const workspace = await databases.getDocument<Workspace>(
+                DATABASE_ID,
+                WORKSPACES_ID,
+                workspaceId
+            )
 
             return c.json({ data: workspace })
         }
