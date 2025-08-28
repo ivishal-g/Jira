@@ -8,8 +8,6 @@ const WorkspaceIdMembersPage = async () => {
     if(!user) redirect("/sign-in");
 
 
-
-
     return (
         <div>
             <MembersList/>

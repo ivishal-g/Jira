@@ -1,3 +1,4 @@
+import "server-only";
 
 import { AUTH_COOKIE } from "@/features/auth/constants";
 import { cookies } from "next/headers";
@@ -5,6 +6,7 @@ import {
     Client,
     Account,
     Databases,
+    Users,
 } from "node-appwrite"
 
 
@@ -29,10 +31,9 @@ export async function createSessionClient(){
             return new Databases(client);
         }
     }
-
 }
 
-export function createAdminClient() {
+export async function createAdminClient() {
     const client = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
         .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)
@@ -43,5 +44,8 @@ export function createAdminClient() {
         get account() {
             return new Account(client);
         },
+        get users(){
+            return new Users(client)
+        }
     };
 };

@@ -6,16 +6,9 @@ import { useState } from "react";
 import { useUpdateTask } from "../api/use-update-task";
 import { Textarea } from "@/components/ui/textarea";
 
-
-
-
-
-
-
 interface TaskDescriptionProps {
     task: Task;
 }
-
 
 export const TaskDescription = ({ task }:TaskDescriptionProps) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -27,10 +20,14 @@ export const TaskDescription = ({ task }:TaskDescriptionProps) => {
         mutate({
             json: {description: value},
             param: { taskId: task.$id}
+        },{
+            onSuccess: () => {
+                setIsEditing(false)
+            }
         });
-    }
+    };
 
-
+    
     return (
         <div className="p-4 border rounded-lg">
             <div className="flex items-center justify-between">

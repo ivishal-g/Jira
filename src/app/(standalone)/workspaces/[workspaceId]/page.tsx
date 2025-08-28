@@ -5,14 +5,14 @@ import { redirect } from "next/navigation";
 
 
 
-const WorkspaceIdPage = async ({ params }:) => {
+const WorkspaceIdPage = async ({ params }) => {
     const user = await getCurrent();
     if(!user) redirect("/sign-in")
         
-    const initialValues = await getWorkspace({ workspaceId: params.workspaceId})
+    const initialValues = await getWorkspace({  workspaceId })
     
     return (
-        <div className="w-full l">
+        <div>
             <EditWorkspaceForm initialValues={initialValues} />
         </div>
     )

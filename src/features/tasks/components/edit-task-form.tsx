@@ -10,9 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 
-import { useCreateTask } from "../api/use-create-task";
 import { DatePicker } from "@/components/date-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
@@ -31,19 +29,18 @@ interface EditTaskFormProps {
 }
 
 export const EditTaskForm = ({ onCancel, projectOptions,initialValues, memberOptions }: EditTaskFormProps) => {
-    const workspaceId = useWorkspaceId();
     const { mutate, isPending} = useUpdateTask();
     const form = useForm<z.infer<typeof createTaskSchema>>({
         resolver: zodResolver(createTaskSchema.omit({ workspaceId: true, description: true})),
         defaultValues: {
-            ...initialValues.dueDate ? new Date(initialValues.dueDate) : undefined,
+            ...initialValues,
+            dueDate: initialValues.dueDate ? new Date(initialValues.dueDate) : undefined
         },
     })
 
     const onSubmit = (values:z.infer<typeof createTaskSchema>) => {
         const finalValues = {
             ...values,
-            workspaceId,
             image: values.image instanceof File ? values.image : ""
         };
         mutate({ json: values, param:{ taskId: initialValues.$id } },{
