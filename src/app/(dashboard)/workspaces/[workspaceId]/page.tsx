@@ -1,5 +1,6 @@
 import { getCurrent } from "@/features/auth/queries";
 import { redirect } from "next/navigation";
+import { WorkspaceIdClient } from "./client";
 
 
 const WorkspaceIdPage = async () => {
