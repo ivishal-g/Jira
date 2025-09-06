@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const user = await getCurrent();
-  if(!user) redirect("/sign-in");
+  if(!user) redirect("/");
 
   const workspaces = await getWorkspaces();
   if (workspaces.total === 0){
