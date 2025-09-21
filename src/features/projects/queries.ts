@@ -15,7 +15,7 @@ export const getProject = async ({ projectId }: GetProjectProps ) => {
 
         const user = await account.get();
 
-         const project = await databases.getDocument<Project>(
+        const project = await databases.getDocument<Project>(
             DATABASE_ID,
             PROJECTS_ID,
             projectId,
